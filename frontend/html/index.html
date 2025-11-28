@@ -4,11 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shop Quần Áo</title>
-
     <link rel="stylesheet" href="../css/home.css" />
-    <style></style>
   </head>
-
   <body>
     <!-- HEADER -->
     <header class="header">
@@ -20,15 +17,14 @@
       </div>
 
       <div class="header-right">
-        <!-- CHƯA LOGIN -->
+        <!-- Nút login/register -->
         <button id="loginBtn">Đăng nhập</button>
         <button id="registerBtn">Đăng ký</button>
 
-        <!-- KHI ĐÃ LOGIN -->
-        <div id="userMenu" class="user-menu">
-          <img id="userAvatar" class="avatar" src="/Asset/user.png" />
-          <span id="userName"></span>
-
+        <!-- User menu khi login -->
+        <div class="user-menu" id="userMenu">
+          <img id="userAvatar" class="avatar" src="/Asset/user.jpg" />
+          <span id="userName">User</span>
           <div class="dropdown" id="dropdownMenu">
             <a href="/profile.html">Thông tin cá nhân</a>
             <a href="/orders.html">Đơn hàng</a>
@@ -36,18 +32,18 @@
           </div>
         </div>
 
-        <!-- GIỎ HÀNG -->
+        <!-- Giỏ hàng -->
         <div class="cart-icon" id="cartBtn">
           🛒 <span id="cartCount">0</span>
         </div>
       </div>
     </header>
 
-    <div class="container">
+    <!-- DANH SÁCH SẢN PHẨM -->
+    <main class="container">
       <h1>Danh sách sản phẩm</h1>
-
       <div id="productList" class="product-list"></div>
-    </div>
+    </main>
 
     <footer>© 2025 – Shop Quần Áo. All rights reserved.</footer>
 
