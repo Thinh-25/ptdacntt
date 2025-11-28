@@ -1,20 +1,72 @@
 body {
+  margin: 0;
   font-family: Arial, sans-serif;
-  padding: 20px;
-  background-color: #f9f9f9;
+  display: flex;
 }
 
-.admin-container {
-  max-width: 900px;
-  margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
+/* HEADER */
+.admin-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #e91e63;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 100;
 }
 
-h2,
-h3 {
-  text-align: center;
+.admin-header .logo {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.admin-header .header-right button {
+  margin-left: 15px;
+  padding: 6px 10px;
+  border: none;
+  background: #fff;
+  color: #e91e63;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 200px;
+  background: #f5f5f5;
+  padding-top: 60px; /* bù header */
+  height: 100vh;
+  position: fixed;
+  overflow-y: auto;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 15px 20px;
+  cursor: pointer;
+}
+
+.sidebar ul li.active,
+.sidebar ul li:hover {
+  background: #e91e63;
+  color: white;
+}
+
+/* CONTENT */
+.content {
+  margin-left: 200px;
+  padding: 80px 30px 30px 30px; /* bù header và sidebar */
+  flex: 1;
 }
 
 table {
@@ -23,23 +75,67 @@ table {
   margin-top: 20px;
 }
 
+table,
 th,
 td {
-  padding: 10px;
   border: 1px solid #ccc;
-  text-align: center;
 }
 
-button {
-  padding: 10px 15px;
-  background-color: #ff6b6b;
-  color: white;
+th,
+td {
+  padding: 8px;
+  text-align: left;
+}
+
+button.action-btn {
+  padding: 4px 8px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  float: right;
 }
 
-button:hover {
-  background-color: #ff4b4b;
+button.edit-btn {
+  background: #3498db;
+  color: white;
+}
+button.delete-btn {
+  background: #e74c3c;
+  color: white;
+}
+/* Cơ bản như trước, thêm modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 200;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  position: relative;
+}
+
+.modal-content input,
+.modal-content button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 22px;
+  cursor: pointer;
 }

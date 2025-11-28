@@ -11,27 +11,27 @@ const __dirname = path.resolve();
 import User from "./models/users.js";
 import bcrypt from "bcryptjs";
 
-function createDefaultAdmin() {
-  User.findByEmail("admin@gmail.com", (err, result) => {
-    if (result.length === 0) {
-      const hashed = bcrypt.hashSync("123456", 10);
+// function createDefaultAdmin() {
+//   User.findByEmail("admin@gmail.com", (err, result) => {
+//     if (result.length === 0) {
+//       const hashed = bcrypt.hashSync("123456", 10);
 
-      User.create(
-        {
-          name: "Admin",
-          email: "admin@gmail.com",
-          password: hashed,
-          role: "admin",
-        },
-        () => console.log("✔ Admin mặc định đã được tạo")
-      );
-    } else {
-      console.log("✔ Admin đã tồn tại");
-    }
-  });
-}
+//       User.create(
+//         {
+//           name: "Admin",
+//           email: "admin@gmail.com",
+//           password: hashed,
+//           role: "admin",
+//         },
+//         () => console.log("✔ Admin mặc định đã được tạo")
+//       );
+//     } else {
+//       console.log("✔ Admin đã tồn tại");
+//     }
+//   });
+// }
 
-createDefaultAdmin();
+// createDefaultAdmin();
 
 // API routes
 app.use("/api/auth", authRoutes);
