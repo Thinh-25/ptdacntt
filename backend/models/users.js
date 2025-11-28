@@ -12,6 +12,10 @@ class User {
       callback
     );
   }
+
+  static getAll(callback) {
+    db.query("SELECT id, name, email, role FROM users", callback);
+  }
 }
 
 export default User;

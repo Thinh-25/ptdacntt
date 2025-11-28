@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 app.use(express.json());
@@ -36,6 +37,7 @@ import bcrypt from "bcryptjs";
 // API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
 
 // Phục vụ static folder frontend
 app.use(express.static(path.join(__dirname, "../frontend")));
