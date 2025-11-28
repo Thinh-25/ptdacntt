@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop Quần Áo</title>
+
+    <link rel="stylesheet" href="../css/home.css" />
+    <style></style>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo">MyShop</div>
+
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Tìm sản phẩm..." />
+        <button id="searchBtn">Tìm</button>
+      </div>
+
+      <div class="header-right">
+        <!-- CHƯA LOGIN -->
+        <button id="loginBtn">Đăng nhập</button>
+        <button id="registerBtn">Đăng ký</button>
+
+        <!-- KHI ĐÃ LOGIN -->
+        <div id="userMenu" class="user-menu">
+          <img id="userAvatar" class="avatar" src="/Asset/user.png" />
+          <span id="userName"></span>
+
+          <div class="dropdown" id="dropdownMenu">
+            <a href="/profile.html">Thông tin cá nhân</a>
+            <a href="/orders.html">Đơn hàng</a>
+            <a id="logoutBtn">Đăng xuất</a>
+          </div>
+        </div>
+
+        <!-- GIỎ HÀNG -->
+        <div class="cart-icon" id="cartBtn">
+          🛒 <span id="cartCount">0</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <h1>Danh sách sản phẩm</h1>
+
+      <div id="productList" class="product-list"></div>
+    </div>
+
+    <footer>© 2025 – Shop Quần Áo. All rights reserved.</footer>
+
+    <script src="../js/home.js"></script>
+  </body>
+</html>
