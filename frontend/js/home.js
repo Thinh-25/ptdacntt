@@ -46,11 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // XỬ LÝ SỰ KIỆN
   // -----------------------------
   loginBtn?.addEventListener("click", () => {
-    window.location.href = "./html/login.html";
+    window.location.href = "login.html";
   });
 
   registerBtn?.addEventListener("click", () => {
-    window.location.href = "./html/register.html";
+    window.location.href = "register.html";
   });
 
   // Click avatar → hiện/ẩn dropdown
