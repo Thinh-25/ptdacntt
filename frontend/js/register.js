@@ -7,19 +7,19 @@ document.addEventListener("DOMContentLoaded", () => {
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById("name").value.trim();
+    const ten = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
+    const matKhau = document.getElementById("password").value.trim();
     const confirmPassword = document
       .getElementById("confirmPassword")
       .value.trim();
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!ten || !email || !matKhau || !confirmPassword) {
       messageEl.textContent = "Vui lòng nhập đầy đủ thông tin";
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (matKhau !== confirmPassword) {
       messageEl.textContent = "Mật khẩu và xác nhận mật khẩu không khớp";
       return;
     }
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("http://localhost:3000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ ten, email, matKhau }),
       });
 
       const data = await res.json();

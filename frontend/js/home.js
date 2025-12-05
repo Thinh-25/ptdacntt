@@ -14,24 +14,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput");
 
   let allProducts = []; // lưu toàn bộ sản phẩm để tìm kiếm
+  let cartCountFromDB = 0; // ví dụ, lấy từ DB nếu cần
 
-  // -----------------------------
-  // CẬP NHẬT GIAO DIỆN THEO LOGIN
-  // -----------------------------
+  // --- CẬP NHẬT GIAO DIỆN THEO LOGIN ---
   function updateUI() {
     if (user && token) {
-      // Ẩn nút login/register
       loginBtn.style.display = "none";
       registerBtn.style.display = "none";
 
-      // Hiện avatar + tên
       userMenu.style.display = "flex";
       userName.innerText = user.ten || "User";
 
-      // Hiện giỏ hàng
       cartBtn.style.display = "flex";
-
-      // ---- LẤY SỐ LƯỢNG GIỎ HÀNG TỪ DB ----
       cartCount.innerText = cartCountFromDB || 0;
     } else {
       loginBtn.style.display = "inline-block";
@@ -44,9 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateUI();
 
-  // -----------------------------
-  // XỬ LÝ SỰ KIỆN
-  // -----------------------------
+  // --- SỰ KIỆN CLICK LOGIN/REGISTER ---
   loginBtn?.addEventListener("click", () => {
     window.location.href = "/html/login.html";
   });
@@ -55,28 +47,25 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/html/register.html";
   });
 
-  // Click avatar → hiện/ẩn dropdown
-  userMenu?.addEventListener("click", () => {
+  // --- CLICK AVATAR/TÊN HIỆN DROPDOWN ---
+  userMenu?.addEventListener("click", (e) => {
     dropdownMenu.classList.toggle("show");
+    e.stopPropagation(); // tránh bị document click chặn ngay
   });
 
-  // Click ra ngoài → ẩn dropdown
-  document.addEventListener("click", (e) => {
-    if (!userMenu.contains(e.target)) {
-      dropdownMenu.classList.remove("show");
-    }
+  // --- CLICK RA NGOÀI ẨN DROPDOWN ---
+  document.addEventListener("click", () => {
+    dropdownMenu.classList.remove("show");
   });
 
-  // Đăng xuất
+  // --- LOGOUT ---
   logoutBtn?.addEventListener("click", () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     window.location.reload();
   });
 
-  // -----------------------------
-  // LOAD PRODUCTS (GIỮ NGUYÊN)
-  // -----------------------------
+  // --- LOAD PRODUCTS ---
   async function loadProducts() {
     try {
       const res = await fetch("http://localhost:3000/api/products");
@@ -94,9 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // -----------------------------
-  // HIỂN THỊ SẢN PHẨM
-  // -----------------------------
+  // --- HIỂN THỊ SẢN PHẨM ---
   function renderProducts(products) {
     const productList = document.getElementById("productList");
     productList.innerHTML = "";
@@ -110,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "product-card";
 
-      const img = p.image ? `/Asset/${p.anhSP}` : "/Asset/no-image.jpg";
+      const img = p.anhSP ? `/Asset/${p.anhSP}` : "/Asset/no-image.jpg";
 
       div.innerHTML = `
         <img src="${img}" class="product-img" alt="${p.tenSP}">
@@ -121,13 +108,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // -----------------------------
-  // TÌM KIẾM
-  // -----------------------------
+  // --- TÌM KIẾM ---
   searchInput?.addEventListener("input", () => {
     const keyword = searchInput.value.toLowerCase().trim();
     const filtered = allProducts.filter((p) =>
-      p.name.toLowerCase().includes(keyword)
+      p.tenSP.toLowerCase().includes(keyword)
     );
     renderProducts(filtered);
   });
