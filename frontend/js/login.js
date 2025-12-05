@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const messageEl = document.getElementById("message");
   const registerBtn = document.getElementById("registerBtn");
 
-  // Xử lý submit form login
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -29,15 +28,18 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Lưu token và user vào localStorage
+      // Lưu token, user và cartCount vào localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("cartCount", data.cartCount || 0);
 
-      // Redirect theo role
+      // Điều hướng theo role
       if (data.user.role === "admin") {
         window.location.href = "/html/userManage.html";
+      } else if (data.user.role === "staff") {
+        window.location.href = "/html/staffDashboard.html";
       } else {
-        window.location.href = "/html/index.html";
+        window.location.href = "/html/index.html"; // khách hoặc user
       }
     } catch (error) {
       console.error(error);
@@ -45,8 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Xử lý nút đăng ký
+  // Chuyển sang trang đăng ký
   registerBtn?.addEventListener("click", () => {
-    window.location.href = "/register"; // chuyển sang trang register
+    window.location.href = "/html/register.html";
   });
 });

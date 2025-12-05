@@ -20,17 +20,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // -----------------------------
   function updateUI() {
     if (user && token) {
-      // Ẩn login/register
+      // Ẩn nút login/register
       loginBtn.style.display = "none";
       registerBtn.style.display = "none";
 
       // Hiện avatar + tên
       userMenu.style.display = "flex";
-      userName.innerText = user.name || "User";
+      userName.innerText = user.ten || "User";
 
       // Hiện giỏ hàng
       cartBtn.style.display = "flex";
-      cartCount.innerText = user.cart?.length || 0;
+
+      // ---- LẤY SỐ LƯỢNG GIỎ HÀNG TỪ DB ----
+      cartCount.innerText = cartCountFromDB || 0;
     } else {
       loginBtn.style.display = "inline-block";
       registerBtn.style.display = "inline-block";
@@ -108,12 +110,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "product-card";
 
-      const img = p.image ? `/Asset/${p.image}` : "/Asset/no-image.jpg";
+      const img = p.image ? `/Asset/${p.anhSP}` : "/Asset/no-image.jpg";
 
       div.innerHTML = `
-        <img src="${img}" class="product-img" alt="${p.name}">
-        <h3>${p.name}</h3>
-        <p>${p.price.toLocaleString()} VND</p>
+        <img src="${img}" class="product-img" alt="${p.tenSP}">
+        <h3>${p.tenSP}</h3>
+        <p>${p.gia.toLocaleString()} VND</p>
       `;
       productList.appendChild(div);
     });
