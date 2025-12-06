@@ -18,6 +18,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/kho", khoRoutes);
 
 // ------------------ STATIC FRONTEND ------------------
+app.use("/Asset", express.static(path.join(__dirname, "../frontend/Asset")));
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 app.get("/", (req, res) =>
@@ -35,7 +36,7 @@ app.get("/register", (req, res) =>
 // Serve uploads
 app.use(
   "/uploads",
-  express.static(path.join(__dirname, "../frontend/uploads"))
+  express.static(path.join(__dirname, "../frontend/Asset"))
 );
 
 // ------------------ START SERVER ------------------

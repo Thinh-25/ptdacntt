@@ -2,13 +2,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   if (!token) {
     alert("Bạn chưa đăng nhập!");
-    window.location.href = "/login.html";
+    window.location.href = "/html/login.html";
     return;
   }
 
   const tabs = document.querySelectorAll(".sidebar ul li");
   const tabContents = document.querySelectorAll(".tab-content");
   const logoutBtn = document.getElementById("logoutBtn");
+
+  let editingProductId = null; // Lưu ID sản phẩm đang sửa
 
   // ------------------- CHUYỂN TAB -------------------
   tabs.forEach((tab) => {
@@ -31,16 +33,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ------------------- FETCH API (có token) -------------------
-  async function fetchData(endpoint) {
+  async function fetchData(endpoint, options = {}) {
     try {
       const res = await fetch(`http://localhost:3000/api/${endpoint}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        ...options,
+        headers: {
+          ...options.headers,
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      if (res.status === 401) {
-        alert("Token hết hạn, vui lòng đăng nhập lại!");
+      if (res.status === 401 || res.status === 403) {
+        alert("Bạn không có quyền truy cập!");
         localStorage.clear();
-        window.location.href = "/login.html";
+        window.location.href = "/html/login.html";
         return;
       }
 
@@ -63,12 +69,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${u.id}</td>
-        <td>${u.name}</td>
+        <td>${u.ten}</td>
         <td>${u.email}</td>
         <td>${u.role}</td>
         <td>
-          <button class="edit-btn" data-id="${u.id}">Sửa</button>
-          <button class="delete-btn" data-id="${u.id}">Xóa</button>
+          <button class="action-btn edit-btn" data-id="${u.id}">Sửa</button>
+          <button class="action-btn delete-btn" data-id="${u.id}">Xóa</button>
         </td>`;
       tbody.appendChild(tr);
     });
@@ -82,6 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const tbody = document.querySelector("#orderTable tbody");
     tbody.innerHTML = "";
 
+    if (orders.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='5'>Chưa có đơn hàng nào</td></tr>";
+      return;
+    }
+
     orders.forEach((o) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
@@ -89,85 +100,11 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${o.user_name}</td>
         <td>${o.status}</td>
         <td>${o.date}</td>
-        <td><button class="edit-btn" data-id="${o.id}">Cập nhật</button></td>`;
+        <td><button class="action-btn edit-btn" data-id="${o.id}">Cập nhật</button></td>`;
       tbody.appendChild(tr);
     });
   }
-
-  // ------------------- RENDER PRODUCTS -------------------
-  async function renderProducts() {
-    const data = await fetchData("products");
-    const products = data.products || [];
-
-    const tbody = document.querySelector("#productTable tbody");
-    tbody.innerHTML = "";
-
-    products.forEach((p) => {
-      const imgSrc = p.image ? `/Asset/${p.anhSP}` : "/Asset/no-image.jpg";
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${p.maSP}</td>
-        <td>${p.tenSP}</td>
-        <td>${Number(p.gia).toLocaleString()}</td>
-        <td><img src="${imgSrc}" width="60"></td>
-        <td>
-          <button class="edit-btn" data-id="${p.id}">Sửa</button>
-          <button class="delete-btn" data-id="${p.id}">Xóa</button>
-        </td>`;
-      tbody.appendChild(tr);
-    });
-  }
-
-  // ------------------- MODAL SẢN PHẨM -------------------
-  const modal = document.getElementById("productModal");
-  const addBtn = document.getElementById("addProductBtn");
-  const closeBtn = modal.querySelector(".close");
-  const form = document.getElementById("productForm");
-
-  addBtn.addEventListener("click", () => {
-    modal.style.display = "block";
-    document.getElementById("modalTitle").innerText = "Thêm sản phẩm";
-    form.reset();
-  });
-
-  closeBtn.addEventListener("click", () => (modal.style.display = "none"));
-  window.addEventListener("click", (e) => {
-    if (e.target === modal) modal.style.display = "none";
-  });
-
-  // ------------------- SUBMIT THÊM SP -------------------
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById("productName").value;
-    const price = document.getElementById("productPrice").value;
-    const image = document.getElementById("productImage").files[0];
-
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", price);
-    if (image) formData.append("image", image);
-
-    try {
-      const res = await fetch("http://localhost:3000/api/products", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
-
-      const data = await res.json();
-      alert(data.message || "Thành công");
-      modal.style.display = "none";
-      renderProducts();
-    } catch (err) {
-      console.error("Add product lỗi:", err);
-      alert("Lỗi khi thêm sản phẩm");
-    }
-  });
-
   // ------------------- KHỞI TẠO -------------------
   renderUsers();
   renderOrders();
-  renderProducts();
 });

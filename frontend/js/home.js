@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartCount = document.getElementById("cartCount");
   const searchInput = document.getElementById("searchInput");
 
-  let allProducts = []; // lưu toàn bộ sản phẩm để tìm kiếm
-  let cartCountFromDB = 0; // ví dụ, lấy từ DB nếu cần
+  let allProducts = [];
+  let cartCountFromDB = 0;
 
   // --- CẬP NHẬT GIAO DIỆN THEO LOGIN ---
   function updateUI() {
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- CLICK AVATAR/TÊN HIỆN DROPDOWN ---
   userMenu?.addEventListener("click", (e) => {
     dropdownMenu.classList.toggle("show");
-    e.stopPropagation(); // tránh bị document click chặn ngay
+    e.stopPropagation();
   });
 
   // --- CLICK RA NGOÀI ẨN DROPDOWN ---
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     productList.innerHTML = "";
 
     if (products.length === 0) {
-      productList.innerHTML = "<p>Không tìm thấy sản phẩm</p>";
+      productList.innerHTML = "<p style='text-align: center; color: #999;'>Không tìm thấy sản phẩm</p>";
       return;
     }
 
@@ -97,12 +97,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "product-card";
 
+      // Sử dụng đúng tên cột từ DB: anhSP, tenSP, gia
       const img = p.anhSP ? `/Asset/${p.anhSP}` : "/Asset/no-image.jpg";
 
       div.innerHTML = `
-        <img src="${img}" class="product-img" alt="${p.tenSP}">
+        <img src="${img}" class="product-img" alt="${p.tenSP}" onerror="this.src='/Asset/no-image.jpg'">
         <h3>${p.tenSP}</h3>
-        <p>${p.gia.toLocaleString()} VND</p>
+        <p>${Number(p.gia).toLocaleString()} VND</p>
       `;
       productList.appendChild(div);
     });
