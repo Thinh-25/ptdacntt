@@ -1,19 +1,22 @@
 import express from "express";
 import path from "path";
 
+import fileUpload from "express-fileupload";
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import khoRoutes from "./routes/kho.routes.js";
 
 const app = express();
-app.use(express.json());
+app.use("/api/products", productRoutes);
 
+app.use(express.json());
+app.use(fileUpload());
 const __dirname = path.resolve();
 
 // ------------------ API ROUTES ------------------
+
 app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/kho", khoRoutes);
 

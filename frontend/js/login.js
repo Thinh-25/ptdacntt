@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Điều hướng theo role
       if (data.user.role === "admin") {
-        window.location.href = "/html/userManage.html";
+        window.location.href = "/html/productManage.html";
       } else if (data.user.role === "staff") {
         window.location.href = "/html/qlKho.html";
       } else {

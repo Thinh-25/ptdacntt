@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quản lý sản phẩm</title>
+    <link rel="stylesheet" href="../css/productManage.css" />
+  </head>
+  <body>
+    <h2>Quản lý sản phẩm</h2>
+    <button id="addProductBtn">Thêm sản phẩm</button>
+
+    <table id="productTable">
+      <thead>
+        <tr>
+          <th>Mã SP</th>
+          <th>Tên SP</th>
+          <th>Giá</th>
+          <th>Ảnh</th>
+          <th>Danh mục</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- Modal thêm/sửa sản phẩm -->
+    <div id="productModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3 id="modalTitle">Thêm sản phẩm</h3>
+        <form id="productForm">
+          <input type="text" id="productName" placeholder="Tên SP" required />
+          <input type="number" id="productPrice" placeholder="Giá" required />
+          <input type="file" id="productImage" />
+          <button type="submit">Lưu</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="../js/productManage.js"></script>
+  </body>
+</html>
