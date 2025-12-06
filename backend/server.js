@@ -33,10 +33,7 @@ app.get("/register", (req, res) =>
 );
 
 // Serve uploads
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "../frontend/uploads"))
-);
+app.use("/Asset", express.static(path.join(__dirname, "../frontend/Asset")));
 
 // ------------------ START SERVER ------------------
 app.listen(3000, () => {

@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.addEventListener("click", () => {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
-      window.location.href = "/index.html";
+      window.location.href = "/html/index.html";
     });
   }
 
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (res.status === 401) {
         alert("Token hết hạn, vui lòng đăng nhập lại!");
         localStorage.clear();
-        window.location.href = "/login.html";
+        window.location.href = "/html/login.html";
         return;
       }
       return await res.json();

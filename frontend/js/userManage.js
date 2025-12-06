@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${u.id}</td>
-        <td>${u.name}</td>
+        <td>${u.ten}</td>
         <td>${u.email}</td>
         <td>${u.role}</td>
         <td>
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     tbody.innerHTML = "";
 
     products.forEach((p) => {
-      const imgSrc = p.image ? `/Asset/${p.anhSP}` : "/Asset/no-image.jpg";
+      const imgSrc = p.anhSP ? `/Asset/${p.anhSP}` : "/Asset/no-image.jpg";
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
