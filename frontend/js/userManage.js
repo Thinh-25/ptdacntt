@@ -103,13 +103,13 @@ document.addEventListener("DOMContentLoaded", () => {
     tbody.innerHTML = "";
 
     products.forEach((p) => {
-      const imgSrc = p.image ? `/Asset/${p.image}` : "/Asset/no-image.jpg";
+      const imgSrc = p.image ? `/Asset/${p.anhSP}` : "/Asset/no-image.jpg";
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${p.id}</td>
-        <td>${p.name}</td>
-        <td>${Number(p.price).toLocaleString()}</td>
+        <td>${p.maSP}</td>
+        <td>${p.tenSP}</td>
+        <td>${Number(p.gia).toLocaleString()}</td>
         <td><img src="${imgSrc}" width="60"></td>
         <td>
           <button class="edit-btn" data-id="${p.id}">Sửa</button>
