@@ -87,12 +87,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const isAdmin = u.role === "admin";
       
       // Tạo dropdown role
-      const roleOptions = `
-        <select class="role-select" data-id="${u.id}" ${isCurrentUser || isAdmin ? 'disabled' : ''}>
-          <option value="user" ${u.role === 'user' ? 'selected' : ''}>User</option>
-          <option value="staff" ${u.role === 'staff' ? 'selected' : ''}>Staff</option>
-        </select>
-      `;
+      const roleOptions = isAdmin 
+        ? '<span style="font-weight: bold; color: #e91e63;">admin</span>'
+        : `<select class="role-select" data-id="${u.id}">
+             <option value="user" ${u.role === 'user' ? 'selected' : ''}>user</option>
+             <option value="staff" ${u.role === 'staff' ? 'selected' : ''}>staff</option>
+           </select>`;
 
       tr.innerHTML = `
         <td>${u.id}</td>

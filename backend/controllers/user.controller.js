@@ -35,7 +35,7 @@ export const deleteUser = (req, res) => {
     }
 
     const targetUser = result[0];
-
+    
     // Không cho phép xóa admin khác
     if (targetUser.role === 'admin') {
       return res.status(403).json({ 
