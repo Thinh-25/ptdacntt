@@ -1,36 +1,304 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng nhập</title>
-    <link rel="stylesheet" href="../css/login.css" />
-  </head>
-  <body>
-    <div class="login-container">
-      <h2>Đăng nhập</h2>
-      <form id="loginForm">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Nhập email" required />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - MyShop</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
+</head>
+<body>
+    <!-- Floating Shapes -->
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
 
-        <label for="password">Mật khẩu</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Nhập mật khẩu"
-          required
-        />
-
-        <button type="submit">Đăng nhập</button>
-        <p id="message"></p>
-      </form>
-
-      <p>
-        Chưa có tài khoản?
-        <button type="button" id="registerBtn">Đăng ký</button>
-      </p>
+    <!-- Back to Home -->
+    <div class="back-home">
+        <a href="../html/index.html">
+            <span>←</span> Về Trang Chủ
+        </a>
     </div>
 
-    <script src="../js/login.js"></script>
-  </body>
+    <!-- Login Container -->
+    <div class="login-container">
+        <!-- Logo -->
+        <div class="auth-logo">🛍️</div>
+
+        <!-- Heading -->
+        <h2>Chào Mừng Trở Lại</h2>
+        <p class="subtitle">Đăng nhập để tiếp tục mua sắm</p>
+
+        <!-- Login Form -->
+        <form id="loginForm" novalidate>
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="email" 
+                        id="email" 
+                        placeholder="Nhập địa chỉ email" 
+                        required
+                        autocomplete="email">
+                    <span class="input-icon">📧</span>
+                </div>
+                <div class="validation-message" id="emailError"></div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        placeholder="Nhập mật khẩu" 
+                        required
+                        autocomplete="current-password">
+                    <span class="input-icon">🔒</span>
+                    <span class="toggle-password" id="togglePassword">👁️</span>
+                </div>
+                <div class="validation-message" id="passwordError"></div>
+            </div>
+
+            <!-- Options -->
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" id="rememberMe">
+                    <span>Ghi nhớ đăng nhập</span>
+                </label>
+                <a href="#" class="forgot-password">Quên mật khẩu?</a>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="submitBtn">
+                Đăng Nhập
+            </button>
+
+            <!-- Message -->
+            <div id="message"></div>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider">
+            <span>Hoặc đăng nhập với</span>
+        </div>
+
+        <!-- Social Login -->
+        <div class="social-login">
+            <button class="social-btn" type="button" onclick="loginWithGoogle()">
+                <span>🔵</span> Google
+            </button>
+            <button class="social-btn" type="button" onclick="loginWithFacebook()">
+                <span>📘</span> Facebook
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="auth-footer">
+            <p>Chưa có tài khoản?</p>
+            <button type="button" id="registerBtn">Đăng Ký Ngay</button>
+        </div>
+    </div>
+
+    <script>
+        // ===== DOM ELEMENTS =====
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const togglePassword = document.getElementById('togglePassword');
+        const rememberMe = document.getElementById('rememberMe');
+        const submitBtn = document.getElementById('submitBtn');
+        const messageEl = document.getElementById('message');
+        const registerBtn = document.getElementById('registerBtn');
+
+        // ===== TOGGLE PASSWORD VISIBILITY =====
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+
+        // ===== VALIDATION =====
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function showError(input, message) {
+            const errorId = input.id + 'Error';
+            const errorEl = document.getElementById(errorId);
+            
+            input.classList.add('invalid');
+            input.classList.remove('valid');
+            
+            if (errorEl) {
+                errorEl.textContent = message;
+                errorEl.classList.add('show', 'error');
+            }
+        }
+
+        function showSuccess(input) {
+            const errorId = input.id + 'Error';
+            const errorEl = document.getElementById(errorId);
+            
+            input.classList.add('valid');
+            input.classList.remove('invalid');
+            
+            if (errorEl) {
+                errorEl.textContent = '';
+                errorEl.classList.remove('show', 'error');
+            }
+        }
+
+        function showMessage(type, text) {
+            messageEl.textContent = text;
+            messageEl.className = `${type} show`;
+            
+            if (type === 'error') {
+                loginForm.classList.add('shake');
+                setTimeout(() => loginForm.classList.remove('shake'), 500);
+            }
+        }
+
+        // ===== REAL-TIME VALIDATION =====
+        emailInput.addEventListener('blur', () => {
+            if (!emailInput.value.trim()) {
+                showError(emailInput, 'Vui lòng nhập email');
+            } else if (!validateEmail(emailInput.value)) {
+                showError(emailInput, 'Email không hợp lệ');
+            } else {
+                showSuccess(emailInput);
+            }
+        });
+
+        passwordInput.addEventListener('blur', () => {
+            if (!passwordInput.value) {
+                showError(passwordInput, 'Vui lòng nhập mật khẩu');
+            } else if (passwordInput.value.length < 6) {
+                showError(passwordInput, 'Mật khẩu phải có ít nhất 6 ký tự');
+            } else {
+                showSuccess(passwordInput);
+            }
+        });
+
+        // ===== LOAD REMEMBERED EMAIL =====
+        window.addEventListener('DOMContentLoaded', () => {
+            const rememberedEmail = localStorage.getItem('rememberedEmail');
+            if (rememberedEmail) {
+                emailInput.value = rememberedEmail;
+                rememberMe.checked = true;
+            }
+        });
+
+        // ===== FORM SUBMIT =====
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // Validate
+            let isValid = true;
+
+            if (!email) {
+                showError(emailInput, 'Vui lòng nhập email');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showError(emailInput, 'Email không hợp lệ');
+                isValid = false;
+            } else {
+                showSuccess(emailInput);
+            }
+
+            if (!password) {
+                showError(passwordInput, 'Vui lòng nhập mật khẩu');
+                isValid = false;
+            } else if (password.length < 6) {
+                showError(passwordInput, 'Mật khẩu phải có ít nhất 6 ký tự');
+                isValid = false;
+            } else {
+                showSuccess(passwordInput);
+            }
+
+            if (!isValid) return;
+
+            // Loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Đang đăng nhập...';
+
+            try {
+                const res = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.message || 'Đăng nhập thất bại');
+                }
+
+                // Save token and user
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
+
+                // Remember email if checked
+                if (rememberMe.checked) {
+                    localStorage.setItem('rememberedEmail', email);
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                }
+
+                // Success message
+                showMessage('success', '✓ Đăng nhập thành công!');
+
+                // Redirect based on role
+                setTimeout(() => {
+                    if (data.user.role === 'admin') {
+                        window.location.href = '../html/dashboard.html';
+                    } else if (data.user.role === 'staff') {
+                        window.location.href = '../html/staff-dashboard.html';
+                    } else {
+                        window.location.href = '../html/index.html';
+                    }
+                }, 1000);
+
+            } catch (error) {
+                showMessage('error', '✕ ' + error.message);
+                
+                // Reset button
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Đăng Nhập';
+            }
+        });
+
+        // ===== REGISTER BUTTON =====
+        registerBtn.addEventListener('click', () => {
+            window.location.href = '../html/register.html';
+        });
+
+        // ===== SOCIAL LOGIN =====
+        function loginWithGoogle() {
+            showMessage('error', 'Tính năng đăng nhập Google đang được phát triển');
+        }
+
+        function loginWithFacebook() {
+            showMessage('error', 'Tính năng đăng nhập Facebook đang được phát triển');
+        }
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', (e) => {
+            // Enter to submit
+            if (e.key === 'Enter' && document.activeElement.tagName !== 'BUTTON') {
+                loginForm.dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
 </html>
