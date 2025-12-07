@@ -15,34 +15,44 @@ const Product = {
 
   // Thêm sản phẩm mới
   create: (product, callback) => {
-    const sql = "INSERT INTO SanPham (tenSP, gia, moTa, anhSP, soLuong) VALUES (?, ?, ?, ?, ?)";
-    db.query(sql, [
-      product.tenSP,
-      product.gia,
-      product.moTa,
-      product.anhSP,
-      product.soLuong
-    ], callback);
+    const sql =
+      "INSERT INTO SanPham (tenSP, gia, moTa, anhSP, soLuong) VALUES (?, ?, ?, ?, ?)";
+    db.query(
+      sql,
+      [
+        product.tenSP,
+        product.gia,
+        product.moTa,
+        product.anhSP,
+        product.soLuong,
+      ],
+      callback
+    );
   },
 
   // Cập nhật sản phẩm
   update: (id, product, callback) => {
-    const sql = "UPDATE SanPham SET tenSP = ?, gia = ?, moTa = ?, anhSP = ?, soLuong = ? WHERE maSP = ?";
-    db.query(sql, [
-      product.tenSP,
-      product.gia,
-      product.moTa,
-      product.anhSP,
-      product.soLuong,
-      id
-    ], callback);
+    const sql =
+      "UPDATE SanPham SET tenSP = ?, gia = ?, moTa = ?, anhSP = ?, soLuong = ? WHERE maSP = ?";
+    db.query(
+      sql,
+      [
+        product.tenSP,
+        product.gia,
+        product.moTa,
+        product.anhSP,
+        product.soLuong,
+        id,
+      ],
+      callback
+    );
   },
 
   // Xóa sản phẩm
   delete: (id, callback) => {
     const sql = "DELETE FROM SanPham WHERE maSP = ?";
     db.query(sql, [id], callback);
-  }
+  },
 };
 
 export default Product;

@@ -18,7 +18,7 @@
     <div class="sidebar">
       <ul>
         <li data-tab="users" class="active">Quản lý tài khoản</li>
-        <li data-tab="orders">Quản lý đơn hàng</li>
+        <li data-tab="categories">Quản lý danh mục</li>
         <li data-tab="products">Quản lý sản phẩm</li>
       </ul>
     </div>
@@ -41,27 +41,106 @@
         </table>
       </div>
 
-      <!-- Quản lý đơn hàng -->
-      <div class="tab-content" id="orders" style="display: none">
-        <h2>Danh sách đơn hàng</h2>
-        <table id="orderTable">
+      <!-- Quản lý danh mục -->
+      <div class="tab-content" id="categories" style="display: none">
+        <h2>Danh sách danh mục</h2>
+
+        <!-- Nút Thêm danh mục -->
+        <button
+          id="addCategoryBtn"
+          style="
+            margin-bottom: 15px;
+            padding: 10px 20px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+        >
+          ➕ Thêm danh mục
+        </button>
+
+        <!-- Bảng danh mục -->
+        <table id="categoryTable">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Người dùng</th>
-              <th>Trạng thái</th>
-              <th>Ngày tạo</th>
+              <th>Tên danh mục</th>
               <th>Hành động</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            <!-- Dữ liệu sẽ load từ JS -->
+          </tbody>
         </table>
+      </div>
+
+      <!-- Modal Thêm/Sửa danh mục -->
+      <div id="categoryModal" class="modal">
+        <div
+          class="modal-content"
+          style="
+            width: 400px;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            background: #fff;
+          "
+        >
+          <span
+            class="close"
+            style="float: right; cursor: pointer; font-size: 20px"
+            >&times;</span
+          >
+          <h3 id="categoryModalTitle">Thêm danh mục</h3>
+          <form id="categoryForm">
+            <label>Tên danh mục *</label>
+            <input
+              type="text"
+              id="categoryName"
+              placeholder="Nhập tên danh mục"
+              required
+              style="
+                width: 100%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+              "
+            />
+            <button
+              type="submit"
+              style="
+                padding: 10px 20px;
+                background: #2196f3;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+              "
+            >
+              💾 Lưu
+            </button>
+          </form>
+        </div>
       </div>
 
       <!-- Quản lý sản phẩm -->
       <div class="tab-content" id="products" style="display: none">
         <h2>Danh sách sản phẩm</h2>
-        <button id="addProductBtn" style="margin-bottom: 15px; padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        <button
+          id="addProductBtn"
+          style="
+            margin-bottom: 15px;
+            padding: 10px 20px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+        >
           ➕ Thêm sản phẩm
         </button>
         <table id="productTable">
@@ -91,7 +170,14 @@
             id="productName"
             placeholder="Nhập tên sản phẩm"
             required
-             style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"
+            style="
+              width: 90%;
+              padding: 10px;
+              margin: 10px 0;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              resize: vertical;
+            "
           />
 
           <label>Giá sản phẩm (VND) *</label>
@@ -101,7 +187,14 @@
             placeholder="Nhập giá"
             min="0"
             required
-            style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"
+            style="
+              width: 90%;
+              padding: 10px;
+              margin: 10px 0;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              resize: vertical;
+            "
           />
 
           <label>Mô tả</label>
@@ -109,7 +202,14 @@
             id="productDesc"
             placeholder="Nhập mô tả sản phẩm"
             rows="3"
-            style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"
+            style="
+              width: 90%;
+              padding: 10px;
+              margin: 10px 0;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              resize: vertical;
+            "
           ></textarea>
 
           <label>Số lượng</label>
@@ -119,23 +219,31 @@
             placeholder="Nhập số lượng"
             min="0"
             value="0"
-             style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"
+            style="
+              width: 90%;
+              padding: 10px;
+              margin: 10px 0;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              resize: vertical;
+            "
           />
 
           <label>Hình ảnh</label>
-          <div id="currentImage" style="display: none;"></div>
-          <input 
-            type="file" 
-            id="productImage" 
+          <div id="currentImage" style="display: none"></div>
+          <input
+            type="file"
+            id="productImage"
             accept="image/*"
-            style="margin-bottom: 10px;"
+            style="margin-bottom: 10px"
           />
 
-          <button type="submit" style="background: #4caf50;">💾 Lưu</button>
+          <button type="submit" style="background: #4caf50">💾 Lưu</button>
         </form>
       </div>
     </div>
     <script src="/js/productManage.js"></script>
     <script src="../js/userManage.js"></script>
+    <script src="../js/cateManage.js"></script>
   </body>
 </html>

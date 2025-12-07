@@ -2,133 +2,90 @@ import Product from "../models/Product.js";
 import path from "path";
 import fs from "fs";
 
-// ====================== LẤY TẤT CẢ SẢN PHẨM ===========================
+// Lấy tất cả sản phẩm
 export const getProducts = (req, res) => {
   Product.getAll((err, result) => {
-    if (err) return res.status(500).json({ message: "Lỗi server" });
+    if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+
     res.json({ products: result });
   });
 };
 
-// ====================== LẤY 1 SẢN PHẨM THEO ID ===========================
+// Lấy sản phẩm theo ID
 export const getProductById = (req, res) => {
-  const { id } = req.params;
-  
-  Product.getById(id, (err, result) => {
-    if (err) return res.status(500).json({ message: "Lỗi server" });
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-    }
+  const { maSP } = req.params;
+
+  Product.getById(maSP, (err, result) => {
+    if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+    if (!result.length)
+      return res.status(404).json({ message: "Sản phẩm không tồn tại" });
+
     res.json({ product: result[0] });
   });
 };
 
-// ====================== THÊM SẢN PHẨM ===========================
-export const createProduct = (req, res) => {
+// Thêm sản phẩm mới
+export const addProduct = (req, res) => {
   const { tenSP, gia, moTa, soLuong } = req.body;
-  
-  if (!tenSP || !gia) {
-    return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin" });
+  let anhSP = null;
+
+  if (req.file) {
+    anhSP = req.file.filename; // tên file lưu trong folder uploads
   }
 
-  // Xử lý file upload (nếu có)
-  let anhSP = null;
-  if (req.file) {
-    anhSP = req.file.filename;
+  if (!tenSP || !gia) {
+    return res
+      .status(400)
+      .json({ message: "Tên và giá sản phẩm không được để trống" });
   }
 
   const newProduct = {
     tenSP,
-    gia: parseInt(gia),
+    gia,
     moTa: moTa || "",
     anhSP,
-    soLuong: parseInt(soLuong) || 0
+    soLuong: soLuong || 0,
   };
 
   Product.create(newProduct, (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Lỗi khi thêm sản phẩm" });
-    }
-    res.json({ 
-      message: "Thêm sản phẩm thành công", 
-      productId: result.insertId 
-    });
+    if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+
+    res.json({ message: "Thêm sản phẩm thành công", id: result.insertId });
   });
 };
 
-// ====================== CẬP NHẬT SẢN PHẨM ===========================
+// Cập nhật sản phẩm
 export const updateProduct = (req, res) => {
-  const { id } = req.params;
-  const { tenSP, gia, moTa, soLuong, oldImage } = req.body;
+  const { maSP } = req.params;
+  const { tenSP, gia, moTa, soLuong } = req.body;
+  let anhSP = null;
 
-  if (!tenSP || !gia) {
-    return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin" });
-  }
-
-  // Xử lý ảnh mới (nếu có)
-  let anhSP = oldImage;
   if (req.file) {
     anhSP = req.file.filename;
-    
-    // Xóa ảnh cũ nếu có
-    if (oldImage) {
-      const oldPath = path.join(process.cwd(), "../frontend/Asset", oldImage);
-      if (fs.existsSync(oldPath)) {
-        fs.unlinkSync(oldPath);
-      }
-    }
   }
 
   const updatedProduct = {
     tenSP,
-    gia: parseInt(gia),
+    gia,
     moTa: moTa || "",
     anhSP,
-    soLuong: parseInt(soLuong) || 0
+    soLuong: soLuong || 0,
   };
 
-  Product.update(id, updatedProduct, (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Lỗi khi cập nhật sản phẩm" });
-    }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-    }
+  Product.update(maSP, updatedProduct, (err) => {
+    if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+
     res.json({ message: "Cập nhật sản phẩm thành công" });
   });
 };
 
-// ====================== XÓA SẢN PHẨM ===========================
+// Xóa sản phẩm
 export const deleteProduct = (req, res) => {
-  const { id } = req.params;
+  const { maSP } = req.params;
 
-  // Lấy thông tin sản phẩm trước khi xóa để xóa ảnh
-  Product.getById(id, (err, result) => {
-    if (err) return res.status(500).json({ message: "Lỗi server" });
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-    }
+  Product.delete(maSP, (err) => {
+    if (err) return res.status(500).json({ message: "Lỗi server", error: err });
 
-    const product = result[0];
-
-    // Xóa sản phẩm trong DB
-    Product.delete(id, (err, deleteResult) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Lỗi khi xóa sản phẩm" });
-      }
-
-      // Xóa ảnh nếu có
-      if (product.anhSP) {
-        const imagePath = path.join(process.cwd(), "../frontend/Asset", product.anhSP);
-        if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
-        }
-      }
-
-      res.json({ message: "Xóa sản phẩm thành công" });
-    });
+    res.json({ message: "Xóa sản phẩm thành công" });
   });
 };

@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const messageEl = document.getElementById("message");
   const loginBtn = document.getElementById("loginBtn");
 
+  // Regex kiểm tra mật khẩu
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
   // Xử lý submit register
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -21,6 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (matKhau !== confirmPassword) {
       messageEl.textContent = "Mật khẩu và xác nhận mật khẩu không khớp";
+      return;
+    }
+
+    // Kiểm tra mật khẩu theo yêu cầu
+    if (!passwordRegex.test(matKhau)) {
+      messageEl.textContent =
+        "Mật khẩu phải ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt";
       return;
     }
 
