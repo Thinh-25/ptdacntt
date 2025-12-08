@@ -102,7 +102,7 @@ button.delete-btn {
   background: #e74c3c;
   color: white;
 }
-/* Cơ bản như trước, thêm modal */
+
 .modal {
   display: none;
   position: fixed;
@@ -138,4 +138,10 @@ button.delete-btn {
   top: 10px;
   font-size: 22px;
   cursor: pointer;
+}
+#productTable td:nth-child(4),
+#productTable th:nth-child(4) {
+  color: #000;        /* màu đen */
+  font-size: 16px;    /* tăng cỡ chữ */
+  font-weight: 600;   /* đậm hơn */
 }

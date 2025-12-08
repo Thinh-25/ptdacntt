@@ -3,7 +3,8 @@ import multer from "multer";
 import path from "path";
 import { 
   getProducts, 
-  getProductById, 
+  getProductById,
+  getProductCategories,
   createProduct, 
   updateProduct, 
   deleteProduct 
@@ -15,7 +16,7 @@ const router = express.Router();
 // Cấu hình multer để upload ảnh
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.resolve("../frontend/Asset"));
+    cb(null, path.join(process.cwd(), "../frontend/Asset"));
   },
   filename: (req, file, cb) => {
     const uniqueName = Date.now() + "-" + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
@@ -39,19 +40,26 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB
 });
 
-// PUBLIC - Lấy danh sách sản phẩm
-router.get("/", verifyToken, getProducts);
+// ================= PUBLIC ROUTES =================
 
-// PUBLIC - Lấy chi tiết 1 sản phẩm
-router.get("/:id", verifyToken, getProductById);
+// Lấy danh sách sản phẩm
+router.get("/", getProducts);
 
-// ADMIN - Thêm sản phẩm
+// Lấy danh mục của sản phẩm (PHẢI ĐẶT TRƯỚC /:id)
+router.get("/:id/categories", getProductCategories);
+
+// Lấy chi tiết 1 sản phẩm
+router.get("/:id", getProductById);
+
+// ================= ADMIN ROUTES =================
+
+// Thêm sản phẩm
 router.post("/", verifyToken, verifyAdmin, upload.single("anhSP"), createProduct);
 
-// ADMIN - Cập nhật sản phẩm
+// Cập nhật sản phẩm
 router.put("/:id", verifyToken, verifyAdmin, upload.single("anhSP"), updateProduct);
 
-// ADMIN - Xóa sản phẩm
+// Xóa sản phẩm
 router.delete("/:id", verifyToken, verifyAdmin, deleteProduct);
 
 export default router;

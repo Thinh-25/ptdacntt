@@ -42,6 +42,32 @@ const Product = {
   delete: (id, callback) => {
     const sql = "DELETE FROM SanPham WHERE maSP = ?";
     db.query(sql, [id], callback);
+  },
+
+  // ================= QUẢN LÝ DANH MỤC =================
+
+  // Lấy danh mục của sản phẩm
+  getCategories: (productId, callback) => {
+    const sql = "SELECT maDanhMuc FROM SanPham_DanhMuc WHERE maSP = ?";
+    db.query(sql, [productId], callback);
+  },
+
+  // Thêm sản phẩm vào danh mục
+  addCategory: (productId, categoryId, callback) => {
+    const sql = "INSERT INTO SanPham_DanhMuc (maSP, maDanhMuc) VALUES (?, ?)";
+    db.query(sql, [productId, categoryId], callback);
+  },
+
+  // Xóa tất cả danh mục của sản phẩm
+  removeAllCategories: (productId, callback) => {
+    const sql = "DELETE FROM SanPham_DanhMuc WHERE maSP = ?";
+    db.query(sql, [productId], callback);
+  },
+
+  // Xóa một danh mục cụ thể của sản phẩm
+  removeCategory: (productId, categoryId, callback) => {
+    const sql = "DELETE FROM SanPham_DanhMuc WHERE maSP = ? AND maDanhMuc = ?";
+    db.query(sql, [productId, categoryId], callback);
   }
 };
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../css/userManage.css" />
+    <link rel="stylesheet" href="../css/admin.css" />
   </head>
   <body>
     <header class="admin-header">
@@ -18,7 +18,7 @@
     <div class="sidebar">
       <ul>
         <li data-tab="users" class="active">Quản lý tài khoản</li>
-        <li data-tab="orders">Quản lý đơn hàng</li>
+        <li data-tab="categories">Quản lý danh mục</li>
         <li data-tab="products">Quản lý sản phẩm</li>
       </ul>
     </div>
@@ -41,16 +41,17 @@
         </table>
       </div>
 
-      <!-- Quản lý đơn hàng -->
-      <div class="tab-content" id="orders" style="display: none">
-        <h2>Danh sách đơn hàng</h2>
-        <table id="orderTable">
+      <!-- Quản lý danh mục -->
+      <div class="tab-content" id="categories" style="display: none">
+        <h2>Danh sách danh mục</h2>
+        <button id="addCategoryBtn" style="margin-bottom: 15px; padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+          ➕ Thêm danh mục
+        </button>
+        <table id="categoryTable">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Người dùng</th>
-              <th>Trạng thái</th>
-              <th>Ngày tạo</th>
+              <th>Tên danh mục</th>
               <th>Hành động</th>
             </tr>
           </thead>
@@ -70,12 +71,32 @@
               <th>ID</th>
               <th>Tên</th>
               <th>Giá</th>
+              <th>Danh mục</th>
               <th>Hình ảnh</th>
               <th>Hành động</th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Modal Thêm/Sửa danh mục -->
+    <div id="categoryModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeCategoryModal">&times;</span>
+        <h3 id="categoryModalTitle">Thêm danh mục</h3>
+        <form id="categoryForm">
+          <label>Tên danh mục *</label>
+          <input
+            type="text"
+            id="categoryName"
+            placeholder="Nhập tên danh mục"
+            required
+          />
+
+          <button type="submit" style="background: #4caf50;">💾 Lưu</button>
+        </form>
       </div>
     </div>
 
@@ -91,7 +112,6 @@
             id="productName"
             placeholder="Nhập tên sản phẩm"
             required
-             style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"
           />
 
           <label>Giá sản phẩm (VND) *</label>
@@ -101,15 +121,25 @@
             placeholder="Nhập giá"
             min="0"
             required
-            style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"
           />
+
+          <label>Danh mục</label>
+          <select
+            id="productCategories"
+            multiple
+            style="width: 100%; padding: 10px; margin: 10px 0; border: 5px solid #ccc; border-radius: 5px; min-height: 120px;"
+          >
+          </select>
+          <small style="color: #666; font-size: 12px;">
+            ⓘ Giữ Ctrl (Windows) hoặc Cmd (Mac) để chọn nhiều danh mục
+          </small>
 
           <label>Mô tả</label>
           <textarea
             id="productDesc"
             placeholder="Nhập mô tả sản phẩm"
             rows="3"
-            style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"
+            style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"
           ></textarea>
 
           <label>Số lượng</label>
@@ -119,7 +149,6 @@
             placeholder="Nhập số lượng"
             min="0"
             value="0"
-             style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"
           />
 
           <label>Hình ảnh</label>
@@ -135,7 +164,10 @@
         </form>
       </div>
     </div>
-    <script src="/js/productManage.js"></script>
+
+    <!-- Import 3 file JS riêng biệt -->
     <script src="../js/userManage.js"></script>
+    <script src="../js/categoryManage.js"></script>
+    <script src="../js/productManage.js"></script>
   </body>
 </html>

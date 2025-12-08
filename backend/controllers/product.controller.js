@@ -23,9 +23,19 @@ export const getProductById = (req, res) => {
   });
 };
 
+// ====================== LẤY DANH MỤC CỦA SẢN PHẨM ===========================
+export const getProductCategories = (req, res) => {
+  const { id } = req.params;
+  
+  Product.getCategories(id, (err, result) => {
+    if (err) return res.status(500).json({ message: "Lỗi server" });
+    res.json({ categories: result });
+  });
+};
+
 // ====================== THÊM SẢN PHẨM ===========================
 export const createProduct = (req, res) => {
-  const { tenSP, gia, moTa, soLuong } = req.body;
+  const { tenSP, gia, moTa, soLuong, categories } = req.body;
   
   if (!tenSP || !gia) {
     return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin" });
@@ -50,9 +60,31 @@ export const createProduct = (req, res) => {
       console.error(err);
       return res.status(500).json({ message: "Lỗi khi thêm sản phẩm" });
     }
+
+    const productId = result.insertId;
+
+    // Nếu có danh mục, thêm vào bảng SanPham_DanhMuc
+    if (categories) {
+      let categoryIds = [];
+      try {
+        categoryIds = JSON.parse(categories);
+      } catch (e) {
+        console.error("Error parsing categories:", e);
+      }
+
+      // Thêm từng danh mục
+      if (Array.isArray(categoryIds) && categoryIds.length > 0) {
+        categoryIds.forEach((categoryId) => {
+          Product.addCategory(productId, categoryId, (err) => {
+            if (err) console.error("Lỗi khi thêm danh mục:", err);
+          });
+        });
+      }
+    }
+
     res.json({ 
       message: "Thêm sản phẩm thành công", 
-      productId: result.insertId 
+      productId: productId 
     });
   });
 };
@@ -60,7 +92,7 @@ export const createProduct = (req, res) => {
 // ====================== CẬP NHẬT SẢN PHẨM ===========================
 export const updateProduct = (req, res) => {
   const { id } = req.params;
-  const { tenSP, gia, moTa, soLuong, oldImage } = req.body;
+  const { tenSP, gia, moTa, soLuong, categories, oldImage } = req.body;
 
   if (!tenSP || !gia) {
     return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin" });
@@ -96,6 +128,31 @@ export const updateProduct = (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
     }
+
+    // Cập nhật danh mục
+    if (categories !== undefined) {
+      let categoryIds = [];
+      try {
+        categoryIds = JSON.parse(categories);
+      } catch (e) {
+        console.error("Error parsing categories:", e);
+      }
+
+      // Xóa tất cả danh mục cũ
+      Product.removeAllCategories(id, (err) => {
+        if (err) console.error("Lỗi xóa danh mục cũ:", err);
+
+        // Thêm danh mục mới
+        if (Array.isArray(categoryIds) && categoryIds.length > 0) {
+          categoryIds.forEach((categoryId) => {
+            Product.addCategory(id, categoryId, (err) => {
+              if (err) console.error("Lỗi thêm danh mục mới:", err);
+            });
+          });
+        }
+      });
+    }
+
     res.json({ message: "Cập nhật sản phẩm thành công" });
   });
 };
