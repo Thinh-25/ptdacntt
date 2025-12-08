@@ -44,7 +44,18 @@
       <!-- Quản lý danh mục -->
       <div class="tab-content" id="categories" style="display: none">
         <h2>Danh sách danh mục</h2>
-        <button id="addCategoryBtn" style="margin-bottom: 15px; padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        <button
+          id="addCategoryBtn"
+          style="
+            margin-bottom: 15px;
+            padding: 10px 20px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+        >
           ➕ Thêm danh mục
         </button>
         <table id="categoryTable">
@@ -62,7 +73,18 @@
       <!-- Quản lý sản phẩm -->
       <div class="tab-content" id="products" style="display: none">
         <h2>Danh sách sản phẩm</h2>
-        <button id="addProductBtn" style="margin-bottom: 15px; padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        <button
+          id="addProductBtn"
+          style="
+            margin-bottom: 15px;
+            padding: 10px 20px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+        >
           ➕ Thêm sản phẩm
         </button>
         <table id="productTable">
@@ -95,7 +117,7 @@
             required
           />
 
-          <button type="submit" style="background: #4caf50;">💾 Lưu</button>
+          <button type="submit" style="background: #4caf50">💾 Lưu</button>
         </form>
       </div>
     </div>
@@ -124,22 +146,34 @@
           />
 
           <label>Danh mục</label>
-          <select
-            id="productCategories"
-            multiple
-            style="width: 100%; padding: 10px; margin: 10px 0; border: 5px solid #ccc; border-radius: 5px; min-height: 120px;"
+          <div
+            id="productCategoriesContainer"
+            style="
+              margin: 10px 0;
+              border: 1px solid #ccc;
+              padding: 10px;
+              border-radius: 5px;
+              min-height: 100px;
+            "
           >
-          </select>
-          <small style="color: #666; font-size: 12px;">
-            ⓘ Giữ Ctrl (Windows) hoặc Cmd (Mac) để chọn nhiều danh mục
+            <!-- Checkbox sẽ được load từ JS -->
+          </div>
+          <small style="color: #666; font-size: 12px">
+            ⓘ Chọn một hoặc nhiều danh mục
           </small>
-
           <label>Mô tả</label>
           <textarea
             id="productDesc"
             placeholder="Nhập mô tả sản phẩm"
             rows="3"
-            style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"
+            style="
+              width: 100%;
+              padding: 10px;
+              margin: 10px 0;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              resize: vertical;
+            "
           ></textarea>
 
           <label>Số lượng</label>
@@ -152,15 +186,15 @@
           />
 
           <label>Hình ảnh</label>
-          <div id="currentImage" style="display: none;"></div>
-          <input 
-            type="file" 
-            id="productImage" 
+          <div id="currentImage" style="display: none"></div>
+          <input
+            type="file"
+            id="productImage"
             accept="image/*"
-            style="margin-bottom: 10px;"
+            style="margin-bottom: 10px"
           />
 
-          <button type="submit" style="background: #4caf50;">💾 Lưu</button>
+          <button type="submit" style="background: #4caf50">💾 Lưu</button>
         </form>
       </div>
     </div>
