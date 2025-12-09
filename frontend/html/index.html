@@ -10,27 +10,24 @@
 <body>
     <header class="header">
         <div class="container header-container">
-            <div class="logo">
-                <a href="index.html"><h1>FASHION<span>STORE</span></h1></a>
+            <div class="header-left">
+                <button id="hamburger-btn" class="hamburger-btn"><i class="fa-solid fa-bars"></i></button>
+                <div class="logo">
+                    <a href="index.html"><h1>FASHION<span>STORE</span></h1></a>
+                </div>
             </div>
-            
-            <nav class="navbar">
-                <ul class="nav-links">
-                    <li><a href="index.html" class="active">Trang chủ</a></li>
-                    <li><a href="#">Sản phẩm</a></li>
-                    <li><a href="#">Bộ sưu tập</a></li>
-                    <li><a href="#">Liên hệ</a></li>
-                </ul>
-            </nav>
 
-            <div class="header-actions">
+            <div class="header-center">
                 <div class="search-box">
-                    <input type="text" id="search-input" placeholder="Tìm kiếm...">
+                    <input type="text" id="search-input" placeholder="Tìm kiếm sản phẩm...">
                     <button id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
+            </div>
+
+            <div class="header-right">
                 <div class="user-actions">
                     <a href="login.html" id="login-btn"><i class="fa-regular fa-user"></i></a>
-                    <a href="#" class="cart-btn">
+                    <a href="#" class="cart-btn" id="open-cart-btn">
                         <i class="fa-solid fa-bag-shopping"></i>
                         <span class="cart-count">0</span>
                     </a>
@@ -39,15 +36,41 @@
         </div>
     </header>
 
-    <section class="hero-banner">
-        <div class="hero-content">
-            <h2>Bộ Sưu Tập Mùa Hè</h2>
-            <p>Phong cách thời thượng - Đón đầu xu hướng 2025</p>
-            <a href="#product-section" class="btn-primary">Mua Ngay</a>
-        </div>
-    </section>
+    <div class="overlay" id="overlay"></div>
 
-    <main class="container">
+    <div class="sidebar-menu" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Danh Mục</h3>
+            <button id="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ul class="sidebar-links">
+            <li><a href="#">Áo thun</a></li>
+            <li><a href="#">Áo mùa đông</a></li>
+            <li><a href="#">Quần dài</a></li>
+            <li><a href="#">Quần short</a></li>
+        </ul>
+    </div>
+
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Giỏ Hàng Của Bạn</h3>
+            <button id="close-cart"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="cart-items" id="cart-items-container">
+            <p class="empty-cart-msg">Giỏ hàng đang trống</p>
+            </div>
+
+        <div class="cart-footer">
+            <div class="total-price">
+                <span>Tổng tiền:</span>
+                <span id="cart-total">0đ</span>
+            </div>
+            <button class="checkout-btn">Thanh Toán</button>
+        </div>
+    </div>
+
+    <main class="container" style="margin-top: 30px;">
         <div class="section-header" id="product-section">
             <h2>Sản Phẩm Mới Nhất</h2>
             <p>Cập nhật những mẫu quần áo hot nhất hiện nay</p>
@@ -64,21 +87,9 @@
                 <h3>Về chúng tôi</h3>
                 <p>Chuyên cung cấp quần áo thời trang chất lượng cao cho giới trẻ.</p>
             </div>
-            <div class="footer-col">
-                <h3>Liên hệ</h3>
-                <p>Email: contact@fashionstore.com</p>
-                <p>Hotline: 0123 456 789</p>
+            <div class="copyright">
+                <p>&copy; 2025 FashionStore. All rights reserved.</p>
             </div>
-            <div class="footer-col">
-                <h3>Theo dõi</h3>
-                <div class="socials">
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="copyright">
-            <p>&copy; 2025 FashionStore. All rights reserved.</p>
         </div>
     </footer>
 
