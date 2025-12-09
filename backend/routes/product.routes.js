@@ -1,9 +1,17 @@
 import express from "express";
-import { getProducts } from "../controllers/product.controller.js";
-import { verifyToken } from "../middleware/auth.middleware.js";
+import {
+  getProducts,
+  addProduct,
+  updateProduct,
+  deleteProduct,
+  upload,
+} from "../controllers/product.controller.js";
 
 const router = express.Router();
 
-router.get("/", verifyToken, getProducts);
+router.get("/", getProducts);
+router.post("/", upload.single("image"), addProduct);
+router.put("/:maSP", upload.single("image"), updateProduct);
+router.delete("/:maSP", deleteProduct);
 
 export default router;

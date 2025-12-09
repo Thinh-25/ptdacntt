@@ -1,48 +1,28 @@
 import express from "express";
 import path from "path";
+
+import fileUpload from "express-fileupload";
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import khoRoutes from "./routes/kho.routes.js";
 
 const app = express();
-app.use(express.json());
+app.use("/api/products", productRoutes);
 
+app.use(express.json());
+app.use(fileUpload());
 const __dirname = path.resolve();
 
-import User from "./models/users.js";
-import bcrypt from "bcryptjs";
+// ------------------ API ROUTES ------------------
 
-// function createDefaultAdmin() {
-//   User.findByEmail("admin@gmail.com", (err, result) => {
-//     if (result.length === 0) {
-//       const hashed = bcrypt.hashSync("123456", 10);
-
-//       User.create(
-//         {
-//           name: "Admin",
-//           email: "admin@gmail.com",
-//           password: hashed,
-//           role: "admin",
-//         },
-//         () => console.log("✔ Admin mặc định đã được tạo")
-//       );
-//     } else {
-//       console.log("✔ Admin đã tồn tại");
-//     }
-//   });
-// }
-
-// createDefaultAdmin();
-
-// API routes
 app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/kho", khoRoutes);
 
-// Phục vụ static folder frontend
+// ------------------ STATIC FRONTEND ------------------
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-// Frontend routes
 app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "../frontend/html/index.html"))
 );
@@ -55,13 +35,10 @@ app.get("/register", (req, res) =>
   res.sendFile(path.join(__dirname, "../frontend/html/register.html"))
 );
 
-// Nếu muốn phục vụ ảnh upload
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "../frontend/uploads"))
-);
+// Serve uploads
+app.use("/Asset", express.static(path.join(__dirname, "../frontend/Asset")));
 
-// Start server
+// ------------------ START SERVER ------------------
 app.listen(3000, () => {
   console.log("🚀 Server chạy tại http://localhost:3000");
 });
