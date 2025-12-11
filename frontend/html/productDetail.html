@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shop Quần Áo</title>
-    <link rel="stylesheet" href="../css/home.css" />
+    <title>Chi tiết sản phẩm</title>
+    <link rel="stylesheet" href="../css/productDetail.css" />
   </head>
   <body>
     <!-- HEADER -->
@@ -17,32 +17,48 @@
       </div>
 
       <div class="header-right">
-        <!-- Nút login/register -->
         <button id="loginBtn">Đăng nhập</button>
         <button id="registerBtn">Đăng ký</button>
 
-        <!-- User menu khi login -->
         <div class="user-menu" id="userMenu">
           <img id="userAvatar" class="avatar" src="/Asset/user.jpg" />
           <span id="userName">User</span>
           <div class="dropdown" id="dropdownMenu">
-            <a href="/profile.html">Thông tin cá nhân</a>
-            <a href="/orders.html">Đơn hàng</a>
+            <a href="/html/profile.html">Thông tin cá nhân</a>
+            <a href="/html/orders.html">Đơn hàng</a>
             <a id="logoutBtn">Đăng xuất</a>
           </div>
         </div>
 
-        <!-- Giỏ hàng -->
         <div class="cart-icon" id="cartBtn">
           🛒 <span id="cartCount">0</span>
         </div>
       </div>
     </header>
 
-    <!-- DANH SÁCH SẢN PHẨM -->
+    <!-- PRODUCT DETAIL -->
     <main class="container">
-      <h1>Danh sách sản phẩm</h1>
-      <div id="productList" class="product-list"></div>
+      <div class="product-detail">
+        <div class="product-image">
+          <img id="productImage" src="/Asset/no-image.jpg" alt="Product" />
+        </div>
+        <div class="product-info">
+          <h2 id="productName">Tên sản phẩm</h2>
+          <p class="price" id="productPrice">0 VND</p>
+          <div id="productDesc">Mô tả sản phẩm</div>
+
+          <div class="quantity-control">
+            <button id="btnMinus">-</button>
+            <input type="number" id="quantity" value="1" min="1" />
+            <button id="btnPlus">+</button>
+          </div>
+
+          <div class="action-buttons">
+            <button id="addToCartBtn" class="btn">Thêm vào giỏ</button>
+            <button id="buyNowBtn" class="btn buy-now">Mua ngay</button>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer class="footer">
@@ -57,6 +73,8 @@
       </div>
     </footer>
 
+    <script src="../js/productDetail.js"></script>
     <script src="../js/home.js"></script>
+    <!-- để header hoạt động -->
   </body>
 </html>

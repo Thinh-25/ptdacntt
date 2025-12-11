@@ -12,11 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartBtn = document.getElementById("cartBtn");
   const cartCount = document.getElementById("cartCount");
   const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
 
   let allProducts = [];
-  let cartCountFromDB = 0;
 
-  // --- CẬP NHẬT GIAO DIỆN THEO LOGIN ---
+  // ================= UI LOGIN =================
   function updateUI() {
     if (user && token) {
       loginBtn.style.display = "none";
@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
       userName.innerText = user.ten || "User";
 
       cartBtn.style.display = "flex";
-      cartCount.innerText = cartCountFromDB || 0;
     } else {
       loginBtn.style.display = "inline-block";
       registerBtn.style.display = "inline-block";
@@ -35,10 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
       cartBtn.style.display = "none";
     }
   }
-
   updateUI();
 
-  // --- SỰ KIỆN CLICK LOGIN/REGISTER ---
+  // ---------------- Click Login/Register ----------------
   loginBtn?.addEventListener("click", () => {
     window.location.href = "/html/login.html";
   });
@@ -47,76 +45,90 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/html/register.html";
   });
 
-  // --- CLICK AVATAR/TÊN HIỆN DROPDOWN ---
+  // ---------------- Avatar dropdown ----------------
   userMenu?.addEventListener("click", (e) => {
     dropdownMenu.classList.toggle("show");
     e.stopPropagation();
   });
 
-  // --- CLICK RA NGOÀI ẨN DROPDOWN ---
   document.addEventListener("click", () => {
     dropdownMenu.classList.remove("show");
   });
 
-  // --- LOGOUT ---
   logoutBtn?.addEventListener("click", () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     window.location.reload();
   });
 
-  // --- LOAD PRODUCTS ---
+  // ================= LOAD SẢN PHẨM =================
   async function loadProducts() {
     try {
       const res = await fetch("http://localhost:3000/api/products");
       const data = await res.json();
 
-      if (!res.ok) {
-        console.error(data);
-        return;
-      }
+      if (!res.ok) return;
 
       allProducts = data.products;
       renderProducts(allProducts);
-    } catch (error) {
-      console.error("❌ Lỗi:", error);
+    } catch (err) {
+      console.error("❌ Lỗi:", err);
     }
   }
 
-  // --- HIỂN THỊ SẢN PHẨM ---
+  // ================= HIỂN THỊ SẢN PHẨM + CLICK CHI TIẾT =================
   function renderProducts(products) {
     const productList = document.getElementById("productList");
-    productList.innerHTML = "";
+    if (!productList) return;
 
-    if (products.length === 0) {
-      productList.innerHTML = "<p style='text-align: center; color: #999;'>Không tìm thấy sản phẩm</p>";
-      return;
-    }
+    productList.innerHTML = "";
 
     products.forEach((p) => {
       const div = document.createElement("div");
       div.className = "product-card";
 
-      // Sử dụng đúng tên cột từ DB: anhSP, tenSP, gia
-      const img = p.anhSP ? `/Asset/${p.anhSP}` : "/Asset/no-image.jpg";
+      const imgSrc = p.anhSP ? `/Asset/${p.anhSP}` : "/Asset/no-image.jpg";
 
       div.innerHTML = `
-        <img src="${img}" class="product-img" alt="${p.tenSP}" onerror="this.src='/Asset/no-image.jpg'">
+        <img src="${imgSrc}" class="product-img" alt="${p.tenSP}">
         <h3>${p.tenSP}</h3>
         <p>${Number(p.gia).toLocaleString()} VND</p>
       `;
+
+      // ⭐ CLICK → TRANG CHI TIẾT
+      div.addEventListener("click", () => {
+        window.location.href = `/html/productDetail.html?id=${p.maSP}`;
+      });
+
       productList.appendChild(div);
     });
   }
-
-  // --- TÌM KIẾM ---
-  searchInput?.addEventListener("input", () => {
-    const keyword = searchInput.value.toLowerCase().trim();
-    const filtered = allProducts.filter((p) =>
-      p.tenSP.toLowerCase().includes(keyword)
-    );
-    renderProducts(filtered);
+  // ---------------- Logo click ----------------
+  document.getElementById("logo")?.addEventListener("click", () => {
+    window.location.href = "/html/index.html";
   });
 
+  // ================= TÌM KIẾM → TRANG KHÁC =================
+
+  function goToSearch() {
+    const keyword = searchInput.value.trim();
+    if (keyword === "") return;
+
+    window.location.href = `/html/search.html?keyword=${encodeURIComponent(
+      keyword
+    )}`;
+  }
+
+  // Nhấn nút Tìm
+  searchBtn?.addEventListener("click", goToSearch);
+
+  // Nhấn Enter trong ô tìm kiếm
+  searchInput?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      goToSearch();
+    }
+  });
+
+  // Load sản phẩm
   loadProducts();
 });
