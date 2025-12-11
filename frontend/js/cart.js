@@ -13,41 +13,80 @@ document.addEventListener("DOMContentLoaded", async () => {
   const totalPriceEl = document.getElementById("totalPrice");
   const checkoutBtn = document.getElementById("checkoutBtn");
 
+  let cartData = []; // Lưu dữ liệu giỏ hàng để dùng ở checkout
+
   async function loadCart() {
     try {
       const res = await fetch("http://localhost:3000/api/cart", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
+      cartData = data.cart;
+
       cartList.innerHTML = "";
-      let totalPrice = 0;
 
       data.cart.forEach((item) => {
         const div = document.createElement("div");
         div.className = "cart-item";
-        const imgSrc = item.anhSP
-          ? `/Asset/${item.anhSP}`
-          : "/Asset/no-image.jpg";
-        totalPrice += item.soLuongMua * item.gia;
 
-        div.innerHTML = `
-          <img src="${imgSrc}" alt="${item.tenSP}">
-          <div class="cart-item-details">
-            <h3>${item.tenSP}</h3>
-            <p>${Number(item.gia).toLocaleString()} VND</p>
-            <div class="quantity-control">
-              <button class="minus">-</button>
-              <input type="number" value="${item.soLuongMua}" min="1" readonly>
-              <button class="plus">+</button>
-            </div>
+        // Checkbox
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "select-item";
+        checkbox.checked = false; // mặc định được tích
+        div.appendChild(checkbox);
+
+        // Ảnh sản phẩm
+        const img = document.createElement("img");
+        img.src = item.anhSP ? `/Asset/${item.anhSP}` : "/Asset/no-image.jpg";
+        img.alt = item.tenSP;
+        div.appendChild(img);
+
+        // Thông tin chi tiết
+        const detailsDiv = document.createElement("div");
+        detailsDiv.className = "cart-item-details";
+        detailsDiv.innerHTML = `
+          <h3>${item.tenSP}</h3>
+          <p>${Number(item.gia).toLocaleString()} VND</p>
+          <div class="quantity-control">
+            <button class="minus">-</button>
+            <input type="number" value="${item.soLuongMua}" min="1" readonly>
+            <button class="plus">+</button>
           </div>
-          <span class="remove-btn">Xóa</span>
         `;
+        div.appendChild(detailsDiv);
 
-        const qtyInput = div.querySelector("input");
-        const btnMinus = div.querySelector(".minus");
-        const btnPlus = div.querySelector(".plus");
-        const removeBtn = div.querySelector(".remove-btn");
+        // Nút xóa
+        const removeBtn = document.createElement("span");
+        removeBtn.className = "remove-btn";
+        removeBtn.innerText = "Xóa";
+        div.appendChild(removeBtn);
+
+        cartList.appendChild(div);
+
+        // --- Event listeners ---
+        const qtyInput = detailsDiv.querySelector("input[type='number']");
+        const btnMinus = detailsDiv.querySelector(".minus");
+        const btnPlus = detailsDiv.querySelector(".plus");
+
+        function updateTotal() {
+          let total = 0;
+          document.querySelectorAll(".cart-item").forEach((ci) => {
+            const cb = ci.querySelector(".select-item");
+            if (cb.checked) {
+              const priceText = ci
+                .querySelector("p")
+                .innerText.replace(/,/g, "")
+                .replace(" VND", "");
+              const price = Number(priceText);
+              const qty = Number(
+                ci.querySelector("input[type='number']").value
+              );
+              total += price * qty;
+            }
+          });
+          totalPriceEl.innerText = total.toLocaleString();
+        }
 
         btnMinus.addEventListener("click", async () => {
           if (item.soLuongMua > 1) {
@@ -92,16 +131,31 @@ document.addEventListener("DOMContentLoaded", async () => {
           window.updateHeaderCartCount?.();
         });
 
-        cartList.appendChild(div);
+        checkbox.addEventListener("change", updateTotal);
       });
 
-      totalPriceEl.innerText = Number(totalPrice).toLocaleString();
+      // Tính tổng lần đầu
+      const event = new Event("change");
+      document
+        .querySelectorAll(".select-item")
+        .forEach((cb) => cb.dispatchEvent(event));
     } catch (err) {
       console.error(err);
     }
   }
 
   checkoutBtn?.addEventListener("click", () => {
+    const selectedItems = [];
+    document.querySelectorAll(".cart-item").forEach((ci) => {
+      const cb = ci.querySelector(".select-item");
+      if (cb.checked) {
+        const maSP = cartData.find(
+          (i) => i.tenSP === ci.querySelector("h3").innerText
+        ).maSP;
+        selectedItems.push(maSP);
+      }
+    });
+    localStorage.setItem("checkoutItems", JSON.stringify(selectedItems));
     window.location.href = "/html/checkout.html";
   });
 
