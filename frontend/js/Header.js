@@ -12,13 +12,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput");
   const searchBtn = document.getElementById("searchBtn");
 
-  let user = JSON.parse(localStorage.getItem("user"));
-  let token = localStorage.getItem("token");
+  loginBtn?.addEventListener("click", () => {
+    window.location.href = "/html/login.html";
+  });
+
+  registerBtn?.addEventListener("click", () => {
+    window.location.href = "/html/register.html";
+  });
 
   // ---------------- UPDATE HEADER ----------------
   async function updateHeader() {
-    user = JSON.parse(localStorage.getItem("user"));
-    token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("token");
 
     if (user && token) {
       loginBtn.style.display = "none";
@@ -26,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
       userMenu.style.display = "flex";
       userName.innerText = user.ten || "User";
       cartBtn.style.display = "flex";
-
       await updateCartCount();
     } else {
       loginBtn.style.display = "inline-block";
@@ -49,10 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
     dropdownMenu.classList.remove("show");
   });
 
+  // ---------------- LOGOUT ----------------
   logoutBtn?.addEventListener("click", () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    localStorage.removeItem("cart"); // optional: clear cart on logout
+    localStorage.removeItem("cart"); // optional
     updateHeader();
   });
 
@@ -74,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
       keyword
     )}`;
   }
-
   searchBtn?.addEventListener("click", goToSearch);
   searchInput?.addEventListener("keydown", (e) => {
     if (e.key === "Enter") goToSearch();
@@ -84,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function updateCartCount() {
     try {
       let total = 0;
+      const token = localStorage.getItem("token");
       if (token) {
         const res = await fetch("http://localhost:3000/api/cart", {
           headers: { Authorization: `Bearer ${token}` },
@@ -103,10 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ---------------- EXPOSE FUNCTION GLOBALLY ----------------
+  // ---------------- GLOBAL ----------------
   window.updateHeaderCartCount = updateCartCount;
 
-  // ---------------- LISTEN TO LOCALSTORAGE CHANGES ----------------
   window.addEventListener("storage", (e) => {
     if (e.key === "cart") updateCartCount();
   });
