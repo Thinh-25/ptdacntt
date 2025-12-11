@@ -16,56 +16,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const searchResults = document.getElementById("searchResults");
   const searchTitle = document.getElementById("searchTitle");
 
-  // ================= UI LOGIN =================
-  function updateUI() {
-    if (user && token) {
-      loginBtn.style.display = "none";
-      registerBtn.style.display = "none";
-
-      userMenu.style.display = "flex";
-      userName.innerText = user.ten || "User";
-
-      cartBtn.style.display = "flex";
-      cartCount.innerText = localStorage.getItem("cartCount") || 0;
-    } else {
-      loginBtn.style.display = "inline-block";
-      registerBtn.style.display = "inline-block";
-
-      userMenu.style.display = "none";
-      cartBtn.style.display = "none";
-    }
-  }
-  updateUI();
-
-  // ---------------- Click Login/Register ----------------
-  loginBtn?.addEventListener(
-    "click",
-    () => (window.location.href = "/html/login.html")
-  );
-  registerBtn?.addEventListener(
-    "click",
-    () => (window.location.href = "/html/register.html")
-  );
-
-  // ---------------- Avatar dropdown ----------------
-  userMenu?.addEventListener("click", (e) => {
-    dropdownMenu.classList.toggle("show");
-    e.stopPropagation();
-  });
-  document.addEventListener("click", () =>
-    dropdownMenu.classList.remove("show")
-  );
-  logoutBtn?.addEventListener("click", () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    window.location.reload();
-  });
-
-  // ---------------- Logo click ----------------
-  document.getElementById("logo")?.addEventListener("click", () => {
-    window.location.href = "/html/index.html";
-  });
-
   // ================= SEARCH =================
   const urlParams = new URLSearchParams(window.location.search);
   const keyword = urlParams.get("keyword") || "";

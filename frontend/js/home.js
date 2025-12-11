@@ -16,51 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let allProducts = [];
 
-  // ================= UI LOGIN =================
-  function updateUI() {
-    if (user && token) {
-      loginBtn.style.display = "none";
-      registerBtn.style.display = "none";
-
-      userMenu.style.display = "flex";
-      userName.innerText = user.ten || "User";
-
-      cartBtn.style.display = "flex";
-    } else {
-      loginBtn.style.display = "inline-block";
-      registerBtn.style.display = "inline-block";
-
-      userMenu.style.display = "none";
-      cartBtn.style.display = "none";
-    }
-  }
-  updateUI();
-
-  // ---------------- Click Login/Register ----------------
-  loginBtn?.addEventListener("click", () => {
-    window.location.href = "/html/login.html";
-  });
-
-  registerBtn?.addEventListener("click", () => {
-    window.location.href = "/html/register.html";
-  });
-
-  // ---------------- Avatar dropdown ----------------
-  userMenu?.addEventListener("click", (e) => {
-    dropdownMenu.classList.toggle("show");
-    e.stopPropagation();
-  });
-
-  document.addEventListener("click", () => {
-    dropdownMenu.classList.remove("show");
-  });
-
-  logoutBtn?.addEventListener("click", () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    window.location.reload();
-  });
-
   // ================= LOAD SẢN PHẨM =================
   async function loadProducts() {
     try {
